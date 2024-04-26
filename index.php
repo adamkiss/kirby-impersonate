@@ -15,7 +15,8 @@ App::plugin('adamkiss/kirby-impersonate', [
 			/** @var User $this */
 			return true;
 		},
-		'redirect-after-impersonation' => null,
+		'redirect-after-impersonation-start' => null,
+		'redirect-after-impersonation-stop' => kirby()->url('panel') . '/users',
 	],
     'api' => [
         'routes' => [
@@ -79,7 +80,7 @@ App::plugin('adamkiss/kirby-impersonate', [
 						}
 						kirby()->session()->data()->set('impersonating', $impersonated_user->email());
 
-						$redirect = option('adamkiss.kirby-impersonate.redirect-after-impersonation');
+						$redirect = option('adamkiss.kirby-impersonate.redirect-after-impersonation-start');
 						if ($redirect) {
 							if (is_string($redirect)) {
 								return Response::go($redirect);
@@ -108,6 +109,19 @@ App::plugin('adamkiss/kirby-impersonate', [
 		'user.logout:after' => function () {
 			kirby()->session()->data()->remove('impersonating');
 		},
+	],
+	'routes' => [
+		[
+			'pattern' => '__impersonate/stop',
+			'action' => function () {
+				if (!kirby()->user()?->isImpersonated()) {
+					return false;
+				}
+
+				kirby()->session()->data()->remove('impersonating');
+				return Response::go(option('adamkiss.kirby-impersonate.redirect-after-impersonation-stop', kirby()->url('panel') . '/users'));
+			},
+		],
 	],
 	'userMethods' => [
 		'canImpersonate' => option('adamkiss.kirby-impersonate.can-impersonate'),
