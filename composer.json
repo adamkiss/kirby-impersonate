@@ -1,0 +1,23 @@
+{
+    "name": "adamkiss/kirby-impersonate",
+    "description": "Impersonate users in Kirby CMS Panel",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Adam Kiss",
+            "email": "iam@adamkiss.com",
+            "homepage": "https://adamkiss.com"
+        }
+    ],
+    "extra": {
+        "kirby-cms-path": false
+    },
+    "require-dev": {
+        "getkirby/cms": "^4.2"
+    },
+    "config": {
+        "allow-plugins": {
+            "getkirby/composer-installer": true
+        }
+    }
+}
