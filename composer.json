@@ -1,6 +1,7 @@
 {
     "name": "adamkiss/kirby-impersonate",
     "description": "Impersonate users in Kirby CMS Panel",
+    "type": "kirby-plugin",
     "license": "MIT",
     "authors": [
         {

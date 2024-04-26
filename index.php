@@ -1,9 +1,10 @@
 <?php
 
+use Kirby\Cms\App;
 use Kirby\Cms\Find;
 use Kirby\Cms\User;
 
-\Kirby\Cms\App::plugin('adamkiss/kirby-impersonate', [
+App::plugin('adamkiss/kirby-impersonate', [
 	'options' => [
 		'can-impersonate' => function () {
 			/** @var User $this */
