@@ -2,6 +2,7 @@
 
 use Kirby\Cms\App;
 use Kirby\Cms\Find;
+use Kirby\Cms\Response;
 use Kirby\Cms\User;
 
 App::plugin('adamkiss/kirby-impersonate', [
@@ -14,6 +15,7 @@ App::plugin('adamkiss/kirby-impersonate', [
 			/** @var User $this */
 			return true;
 		},
+		'redirect-after-impersonation' => null,
 	],
     'api' => [
         'routes' => [
@@ -40,7 +42,7 @@ App::plugin('adamkiss/kirby-impersonate', [
 					];
 				},
 			]
-		
+
         ],
     ],
 	'areas' => [
@@ -71,13 +73,23 @@ App::plugin('adamkiss/kirby-impersonate', [
 						if (!$user || !$user?->canImpersonate()) {
 							return false;
 						}
-
 						$impersonated_user = Find::user($uuid);
 						if (!$impersonated_user || !$impersonated_user->canBeImpersonated()) {
 							return false;
 						}
-
 						kirby()->session()->data()->set('impersonating', $impersonated_user->email());
+
+						$redirect = option('adamkiss.kirby-impersonate.redirect-after-impersonation');
+						if ($redirect) {
+							if (is_string($redirect)) {
+								return Response::go($redirect);
+							}
+
+							if (is_callable($redirect)) {
+								return $redirect($impersonated_user);
+							}
+						}
+
 						return [
 							'component' => 'impersonation-emitter',
 							'props' => [
@@ -90,7 +102,7 @@ App::plugin('adamkiss/kirby-impersonate', [
 					},
 				],
 			],
-		]	
+		]
 	],
 	'hooks' => [
 		'user.logout:after' => function () {
@@ -100,5 +112,8 @@ App::plugin('adamkiss/kirby-impersonate', [
 	'userMethods' => [
 		'canImpersonate' => option('adamkiss.kirby-impersonate.can-impersonate'),
 		'canBeImpersonated' => option('adamkiss.kirby-impersonate.can-be-impersonated'),
+		'isImpersonated' => function () {
+			return kirby()->session()?->data()?->get('impersonating') === $this->email();
+		},
 	]
 ]);
