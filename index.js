@@ -1,5 +1,5 @@
 class IsImpersonating extends HTMLElement {
-	#debug = true
+	#debug = false
 
 	constructor() {
 		super();
