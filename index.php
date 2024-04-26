@@ -19,6 +19,10 @@ use Kirby\Cms\User;
 			[
 				'pattern' => 'impersonate/status',
 				'action'  => function () {
+					if (!kirby()->user()?->canImpersonate()) {
+						kirby()->session()->data()->remove('impersonating');
+					}
+
 					return [
 						'impersonating' => kirby()->session()?->data()?->get('impersonating', false) ?? false,
 					];
@@ -86,6 +90,11 @@ use Kirby\Cms\User;
 				],
 			],
 		]	
+	],
+	'hooks' => [
+		'user.logout:after' => function () {
+			kirby()->session()->data()->remove('impersonating');
+		},
 	],
 	'userMethods' => [
 		'canImpersonate' => option('adamkiss.kirby-impersonate.can-impersonate'),
