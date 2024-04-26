@@ -20,7 +20,7 @@ App::plugin('adamkiss/kirby-impersonate', [
 			[
 				'pattern' => 'impersonate/status',
 				'action'  => function () {
-					if (!kirby()->user()?->canImpersonate()) {
+					if (!kirby()->user()) {
 						kirby()->session()->data()->remove('impersonating');
 					}
 
