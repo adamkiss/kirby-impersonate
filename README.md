@@ -27,31 +27,31 @@ By default, any user with access to users table can impersonate any other user. 
 ```php
 // config.php
 return [
-    'adamkiss.kirby-impersonate' => [
+	'adamkiss.kirby-impersonate' => [
 		'can-impersonate' => function () {
-            // who can impersonate? this is a user method,
-            // so "$this" is a user who's checked.
-            // you have access to role, email, uuid…
+			// who can impersonate? this is a user method,
+			// so "$this" is a user who's checked.
+			// you have access to role, email, uuid…
 
 			/** @var User $this */
 			return true;
 		},
 		'can-be-impersonated' => function () {
-            // who can be target of impersonation? this is a user method,
-            // so "$this" is a user who's checked
-            // you have access to role, email, uuid…
+			// who can be target of impersonation? this is a user method,
+			// so "$this" is a user who's checked
+			// you have access to role, email, uuid…
 
-            /** @var User $this */
+			/** @var User $this */
 			return true;
 		},
-        
-        // Since the start of redirection is in the users area, null just reloads
-        // You can also use a string to get a URL, or a Closure with the impersonated user
-        // if you need different redirects base on role / email / whatever
+		
+		// Since the start of redirection is in the users area, null just reloads
+		// You can also use a string to get a URL, or a Closure with the impersonated user
+		// if you need different redirects base on role / email / whatever
 		'redirect-after-impersonation-start' => null,
 
-        // Where you're redirected after the impersonation stops
-        // this can be only a string
+		// Where you're redirected after the impersonation stops
+		// this can be only a string
 		'redirect-after-impersonation-stop' => kirby()->url('panel') . '/users',    ]
 ];
 ```
