@@ -106,6 +106,11 @@ App::plugin('adamkiss/kirby-impersonate', [
 		]
 	],
 	'hooks' => [
+		'system.loadPlugins:after' => function () {
+			if (kirby()->user() && $who = kirby()->session()->data()->get('impersonating')) {
+				kirby()->auth()->impersonate($who);
+			}
+		},
 		'user.logout:after' => function () {
 			kirby()->session()->data()->remove('impersonating');
 		},
